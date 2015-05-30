@@ -1,25 +1,46 @@
 package com.game.src.main;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.game.src.main.classes.EntityA;
+import com.game.src.main.classes.Keyboard;
 
 public class Player extends GameObject implements EntityA {
 	
-	private double velX = 0; //velocity x
-	private double velY = 0; //velocity y
+	private final int SPEED = 5;
+	private int cspeed = SPEED;
+	private int fireRate = 0;
 		
 	private Textures tex;
 	
-	public Player(double x, double y, Textures tex){
+	private Game game;
+	private Controller c;
+	private Keyboard input;
+	
+	public Player(double x, double y, Textures tex, Game game, Controller c, Keyboard input){
 		super(x, y);
 		this.tex = tex;
+		this.game = game;
+		this.c = c;
+		this.input = input;
+		fireRate = PlayerBullet.FIRE_RATE;
 	}
 	
 	public void tick(){
-		x+=velX;
-		y+=velY;
+		if (fireRate > 0) fireRate--;
+		
+		if (input.up) y -= cspeed;
+		if (input.down) y += cspeed;
+		if (input.left) x -= cspeed;
+		if (input.right) x += cspeed;
+		if (input.slow) cspeed = 2;
+		if (!input.slow) cspeed = SPEED;
+		if (input.shoot && fireRate <= 0) {
+			c.addEntity(new PlayerBullet(x, y, tex, c, game)); //add bullets
+			fireRate = PlayerBullet.FIRE_RATE;
+		}
 		
 		//set borders
 		if (x <= 0)
@@ -30,14 +51,16 @@ public class Player extends GameObject implements EntityA {
 			y = 0;
 		if (y >= 480 - 32)
 			y = 480 - 32;
-	} //how the player moves
+	}
 	
 	public void render(Graphics g){
 		g.drawImage(tex.player, (int)x, (int)y,null);
-	} //display the player
+		//Graphics2D g2d = (Graphics2D) g;
+		//g2d.draw(this.getBounds());
+	}
 	
 	public Rectangle getBounds(){
-		return new Rectangle((int)x, (int)y, 32, 32);
+		return new Rectangle((int)x + 7, (int)y + 2, 20, 26);
 	}
 	
 	public double getX(){
@@ -52,11 +75,6 @@ public class Player extends GameObject implements EntityA {
 	public void setY(double y){
 		this.y = y;
 	}
-	public void setVelX(double velX){
-		this.velX=velX;
-	}
-	public void setVelY(double velY){
-		this.velY=velY;
-	}
+
 	
 }

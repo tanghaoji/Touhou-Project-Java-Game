@@ -28,6 +28,11 @@ public class Menu {
 		//g2d.draw(exstartButton);
 		g.drawString("Quit", quitButton.x + 12, quitButton.y + 27);
 		//g2d.draw(quitButton);
+		
+		Font fnt2 = new Font("Arial Bold", Font.BOLD, 17);
+		g.setFont(fnt2);
+		g.drawString("Shoot: Z/X   Move: ¡û¡ü¡ý¡ú ", 290, 400);
+		g.drawString("Hold Shift to deaccelerate", 290, 420);
 	}
 
 }

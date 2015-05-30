@@ -24,9 +24,10 @@ public class Controller {
 		this.game = game;
 	}
 	
-	public void createEnemy(int enemy_count){
+	public void createEnemy(int enemy_count, int bullet_speed, int firerate){
 		for(int i = 0; i < enemy_count; i++){
-			addEntity(new Enemy(r.nextInt(Game.WIDTH*Game.SCALE), -10, tex, this, game));
+			Enemy e = new Enemy(r.nextInt(Game.WIDTH*Game.SCALE), -10, tex, this, game, firerate);
+			addEntity(e);
 		}
 	}
 	
